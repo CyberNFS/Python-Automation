@@ -56,7 +56,7 @@ def main():
         send_message(message, emails)
         print("Succesfully sent reminders to:", emails)
     except Exception as e:
-        print("Failure to send email", file=sys.stderr)
+        print("Failure to send email with :{}".format(e), file=sys.stderr)
 
 
 if __name__ == "__main__":
