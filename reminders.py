@@ -15,7 +15,7 @@ def usage():
 
 
 def dow(date):
-    dateobj = datetime.datetime.strptime(date, r"%d/%m/%Y")
+    dateobj = datetime.datetime.strptime(date, r"%Y-%m-%d")
     return dateobj.strftime("%A")
 
 
