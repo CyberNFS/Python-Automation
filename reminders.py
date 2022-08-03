@@ -4,6 +4,7 @@ import datetime
 import email
 import smtplib
 import sys
+import csv
 
 
 def usage():
@@ -19,12 +20,12 @@ def dow(date):
     return dateobj.strftime("%A")
 
 
-def message_template(date, title):
+def message_template(date, title, name):
     message = email.message.EmailMessage()
     weekday = dow(date)
     message['Subject'] = f'Meeting reminder: "{title}"'
     message.set_content(f"""
-Hi all!
+Hi {name}!
 
 This is a quick reminder to you all that we have a meeting about:
 '{title}'
@@ -35,11 +36,24 @@ See you there.
     return message
 
 
-def send_message(message, emails):
+def read_names(contacts):
+    names = {}
+    with open(contacts) as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader:
+            # create dictionary with key row[0], value row[1] - email and name
+            names[row[0]] = row[1]
+    return names
+
+
+def send_message(date, title, emails, contacts):
     smtp = smtplib.SMTP('localhost')
-    message['From'] = 'noreply@example.com'
+    # expensive operation outside the for loop
+    names = read_names(contacts)
     for email in emails.split(','):
-        del message['To']
+        name = names(email)
+        message = message_template(date, title, name)
+        message['From'] = 'noreply@example.com'
         message['To'] = email
         smtp.send_message(message)
     smtp.quit()
