@@ -6,6 +6,7 @@ def find_item(list, item):
 
   # Is the item in the center of the list?
   middle = len(list) // 2
+  # '//' so called floor division = division result rounded to the next smallest whole number
   if list[middle] == item:
     return True
 
